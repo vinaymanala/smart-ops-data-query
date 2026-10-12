@@ -1,0 +1,39 @@
+@core_HostAddress = http://localhost:5047
+
+POST {{core_HostAddress}}/api/chat/stream
+Accept: application/json
+Content-Type: application/json
+
+{
+    "Prompt": "Get me investor data for id INV-1001"
+}
+
+###
+
+POST {{core_HostAddress}}/api/chat/stream
+Accept: application/json
+Content-Type: application/json
+
+{
+    "Prompt": "Get me investors data for country JP"
+}
+
+###
+
+POST {{core_HostAddress}}/api/chat/stream
+Accept: application/json
+Content-Type: application/json
+
+{
+    "Prompt": "Get me investors data by region Asia"
+}
+
+###
+
+POST {{core_HostAddress}}/api/chat/stream
+Accept: application/json
+Content-Type: application/json
+
+{
+    "Prompt": "Get me investors data by city Robertfort"
+}
