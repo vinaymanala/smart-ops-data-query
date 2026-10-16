@@ -1,4 +1,4 @@
-@core_HostAddress = http://localhost:5047
+@core_HostAddress = http://localhost:8080
 
 POST {{core_HostAddress}}/api/chat/stream
 Accept: application/json
@@ -36,4 +36,14 @@ Content-Type: application/json
 
 {
     "Prompt": "Get me investors data by city Robertfort"
+}
+
+###
+
+POST {{core_HostAddress}}/api/search/stream
+Accept: application/json
+Content-Type: application/json
+
+{
+    "Prompt": "Get me investor data for brazil"
 }

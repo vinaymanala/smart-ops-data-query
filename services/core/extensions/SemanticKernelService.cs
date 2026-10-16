@@ -4,29 +4,24 @@ namespace core.extensions;
 
 public static class SemanticKernelService
 {
-    public static Kernel UseSemanticKernelService(this WebApplication app)
-    {        
+    public static Kernel AddSemanticKernelService(this IServiceCollection services, IConfiguration configuration)
+    {
         var skBuilder = Kernel.CreateBuilder();
         skBuilder.Services.AddLogging();
-        skBuilder.Services.AddHttpClient();        
+        skBuilder.Services.AddHttpClient();
 
-        var config = new ConfigurationBuilder()
-        .AddUserSecrets<Program>()
-        .AddJsonFile("appsettings.json", optional: true)
-        .AddJsonFile("appsettings.Development.json", optional: true)
-        .Build();
+        var groqApiKey = configuration["GROQ_API_KEY"];
+        var groqModelEndpoint = configuration["GROQ_MODEL_ENDPOINT"] ?? "https://api.groq.com/openai/v1";
+        var groqModelName = configuration["GROQ_MODEL_NAME"] ?? "openai/gpt-oss-20b";
 
-        var groqApiKey = config["GROQ_API_KEY"];
-        var groqModelEndpoint = config["GROQ_MODEL_ENDPOINT"] ?? "https://api.groq.com/openai/v1";
-        var groqModelName = config["GROQ_MODEL_NAME"] ?? "openai/gpt-oss-20b";
         skBuilder.AddOpenAIChatCompletion(
             modelId: groqModelName,
             apiKey: groqApiKey,
             endpoint: new Uri(groqModelEndpoint)
         );
-        
-        // Build the kernel
-        return skBuilder.Build();
 
+        var kernel = skBuilder.Build();
+        services.AddSingleton(kernel);
+        return kernel;
     }
 }
