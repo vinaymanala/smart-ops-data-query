@@ -1,0 +1,26 @@
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+
+WORKDIR /core
+
+COPY core/ core/
+
+RUN dotnet publish "core/core.csproj" \    
+    --configuration Release \
+    --self-contained true \
+    --output /app/publish \
+    /p:PublishSingleFile=true
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:10.0 AS runtime
+
+WORKDIR /app
+
+
+RUN groupadd -g 1001 appgroup \
+    && useradd -u 1001 -g appgroup -m -d /app -s /bin/false appuser
+
+COPY --from=build --chown=appuser:appgroup /app/publish/core .
+
+USER appuser
+
+ENTRYPOINT ["./core"]
